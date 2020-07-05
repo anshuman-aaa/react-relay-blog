@@ -5,7 +5,7 @@
  */
 
 import uuid from 'uuid';
-// import slugify from 'slugify';
+import slugify from 'slugify';
 // import validator from 'validator';
 import { mutationWithClientMutationId } from 'graphql-relay';
 import {
@@ -20,16 +20,16 @@ import db from '../db';
 import { BlogType } from '../types';
 import { fromGlobalId } from '../utils';
 
-// function slug(text) {
-//   return slugify(text, { lower: true });
-// }
+function slug(text) {
+  return slugify(text, { lower: true });
+}
 
-export const upsertStory = mutationWithClientMutationId({
-  name: 'UpsertStory',
-  description: 'Creates or updates a story.',
+export const upsertBlog = mutationWithClientMutationId({
+  name: 'UpsertBlog',
+  description: 'Creates or updates a blog.',
 
   inputFields: {
-    id: { type: GraphQLInt },
+    id: { type: GraphQLID },
     categoryId: { type: GraphQLInt },
     blogTitle: { type: GraphQLString },
     blogDesc: { type: GraphQLString },
@@ -39,13 +39,12 @@ export const upsertStory = mutationWithClientMutationId({
   },
 
   outputFields: {
-    story: { type: BlogType },
+    blog: { type: BlogType },
   },
 
   async mutateAndGetPayload(input, ctx) {
     const id = input.id ? fromGlobalId(input.id, 'Blog') : null;
     const newId = uuid.v4();
-
     let blog;
 
     if (id) {
@@ -59,56 +58,57 @@ export const upsertStory = mutationWithClientMutationId({
       }
 
       // Only the author of the story or admins can edit it
-      ctx.ensureIsAuthorized(
-        user => blog.author_id === user.id || user.isAdmin,
-      );
-    } else {
-      // ctx.ensureIsAuthorized();
+      // ctx.ensureIsAuthorized(
+      //   user => blog.author_id === user.id || user.isAdmin,
+      // );
     }
+    // else {
+    //   ctx.ensureIsAuthorized();
+    // }
 
     // Validate and sanitize user input
     const data = await ctx.validate(
       input,
       id ? 'update' : 'create',
-    )(x =>
-      x
-        .field('blogTitle', { trim: true })
-        .isRequired()
-        .isLength({ min: 5, max: 80 })
+    )(
+      x =>
+        x
+          .field('categoryId')
+          .field('blogTitle', { trim: true })
+          .isRequired()
+          .isLength({ min: 5, max: 80 })
 
-        .field('blogLogo', { alias: 'URL or text', trim: true })
-        .isRequired()
-        .isLength({ min: 10, max: 1000 })
-
-        .field('blogDesc', {
-          trim: false,
-        })
-
-        .field('approved')
-        .is(() => ctx.user.isAdmin, 'Only admins can approve a story.'),
+          .field('blogLogo', { alias: 'URL or text', trim: true })
+          .isRequired()
+          .isLength({ min: 10, max: 1000 })
+          .field('blogDesc', {
+            trim: false,
+          }),
+      // .field('approved')
+      // .is(() => ctx.user.isAdmin, 'Only admins can approve a story.'),
     );
+    console.log('data', data, newId);
+    if (data.blogTitle) {
+      data.slug = `${slug(data.blogTitle)}-${(id || newId).substr(29)}`;
+    }
 
-    // if (data.blogTitle) {
-    //   data.slug = `${slug(data.title)}-${(id || newId).substr(29)}`;
-    // }
-
-    // if (id && Object.keys(data).length) {
-    //   [blog] = await db
-    //     .table('stories')
-    //     .where({ id })
-    //     .update({ ...data, updated_at: db.fn.now() })
-    //     .returning('*');
-    // } else {
-    [blog] = await db
-      .table('blogs')
-      .insert({
-        id: newId,
-        ...data,
-        author_id: ctx.user.id,
-        approved: ctx.user.isAdmin ? true : false,
-      })
-      .returning('*');
-    // }
+    if (id && Object.keys(data).length) {
+      [blog] = await db
+        .table('blogs')
+        .where({ id })
+        .update({ ...data, updated_at: db.fn.now() })
+        .returning('*');
+    } else {
+      [blog] = await db
+        .table('blogs')
+        .insert({
+          id: newId,
+          ...data,
+          // author_id: ctx.user.id,
+          approved: true,
+        })
+        .returning('*');
+    }
 
     return { blog };
   },

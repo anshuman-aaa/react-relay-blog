@@ -12,14 +12,15 @@ import { assignType, getType } from './utils';
 export const { nodeInterface, nodeField, nodesField } = nodeDefinitions(
   (globalId, context) => {
     const { type, id } = fromGlobalId(globalId);
-
     switch (type) {
       case 'User':
         return context.userById.load(id).then(assignType('User'));
+      case 'Story':
+        return context.storyById.load(id).then(assignType('Story'));
+      case 'Comment':
+        return context.commentById.load(id).then(assignType('Comment'));
       case 'Blog':
         return context.blogById.load(id).then(assignType('Blog'));
-      case 'Category':
-        return context.categoryById.load(id).then(assignType('Category'));
       default:
         return null;
     }
@@ -28,10 +29,12 @@ export const { nodeInterface, nodeField, nodesField } = nodeDefinitions(
     switch (getType(obj)) {
       case 'User':
         return require('./types').UserType;
-      case 'Blog':
+      case 'Story':
         return require('./types').StoryType;
       case 'Comment':
         return require('./types').CommentType;
+      case 'Blog':
+        return require('./types').BlogType;
       default:
         return null;
     }

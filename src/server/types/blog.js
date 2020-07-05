@@ -4,7 +4,7 @@
  * Copyright (c) 2015-present Kriasoft | MIT License
  */
 
-import _ from 'lodash';
+// import _ from 'lodash';
 import { globalIdField } from 'graphql-relay';
 import {
   GraphQLObjectType,
@@ -32,21 +32,21 @@ export const BlogType = new GraphQLObjectType({
 
     blogDesc: {
       type: new GraphQLNonNull(GraphQLString),
-      args: {
-        truncate: { type: GraphQLInt },
-      },
-      resolve(self, args) {
-        return args.truncate
-          ? _.truncate(self.blogDesc, { length: args.truncate })
-          : self.blogDesc;
-      },
+      // args: {
+      //   truncate: { type: GraphQLInt },
+      // },
+      // resolve(self, args) {
+      //   return args.truncate
+      //     ? _.truncate(self.blogDesc, { length: args.truncate })
+      //     : self.blogDesc;
+      // },
     },
 
     blogLogo: {
       type: new GraphQLNonNull(GraphQLString),
-      resolve(self) {
-        return self.blogLogo;
-      },
+      // resolve(self) {
+      //   return self.blogLogo;
+      // },
     },
     createdAt: dateField(self => self.created_at),
     updatedAt: dateField(self => self.updated_at),

@@ -9,10 +9,33 @@ type Blog implements Node {
   id: ID!
   categoryId: Int!
   blogTitle: String!
-  blogDesc(truncate: Int): String!
+  blogDesc: String!
   blogLogo: String!
   createdAt(format: String): String
   updatedAt(format: String): String
+}
+
+type Comment implements Node {
+  # The ID of an object
+  id: ID!
+  story: Story!
+  parent: Comment
+  author: User!
+  comments: [Comment]
+  text: String
+  pointsCount: Int!
+  createdAt(format: String): String
+  updatedAt(format: String): String
+}
+
+input DeleteUserInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type DeleteUserPayload {
+  deletedUserId: String
+  clientMutationId: String
 }
 
 type Identity {
@@ -32,16 +55,25 @@ input LikeStoryInput {
 }
 
 type LikeStoryPayload {
-  story: Blog
+  story: Story
   clientMutationId: String
 }
 
 type Mutation {
+  # Updates a user.
+  updateUser(input: UpdateUserInput!): UpdateUserPayload
+
+  # Deletes a user.
+  deleteUser(input: DeleteUserInput!): DeleteUserPayload
+
   # Creates or updates a story.
   upsertStory(input: UpsertStoryInput!): UpsertStoryPayload
 
   # Marks the story as "liked".
   likeStory(input: LikeStoryInput!): LikeStoryPayload
+
+  # Creates or updates a blog.
+  upsertBlog(input: UpsertBlogInput!): UpsertBlogPayload
 }
 
 # An object with an ID
@@ -80,11 +112,45 @@ type Query {
   me: User
   user(username: String!): User
   users(after: String, first: Int): UserConnection
-  story(slug: String!): Blog
-  stories: [Blog]
+  story(slug: String!): Story
+  stories: [Story]
 }
 
-input UpsertStoryInput {
+type Story implements Node {
+  # The ID of an object
+  id: ID!
+  author: User!
+  slug: String!
+  title: String!
+  text(truncate: Int): String!
+  isURL: Boolean!
+  comments: [Comment]
+  pointsCount: Int!
+  pointGiven: Boolean!
+  commentsCount: Int!
+  createdAt(format: String): String
+  updatedAt(format: String): String
+}
+
+input UpdateUserInput {
+  id: ID!
+  username: String
+  email: String
+  displayName: String
+  photoURL: String
+  timeZone: String
+  isAdmin: Boolean
+  validateOnly: Boolean
+  clientMutationId: String
+}
+
+type UpdateUserPayload {
+  user: User
+  clientMutationId: String
+}
+
+input UpsertBlogInput {
+  id: ID
   categoryId: Int
   blogTitle: String
   blogDesc: String
@@ -94,8 +160,22 @@ input UpsertStoryInput {
   clientMutationId: String
 }
 
+type UpsertBlogPayload {
+  blog: Blog
+  clientMutationId: String
+}
+
+input UpsertStoryInput {
+  id: ID
+  title: String
+  text: String
+  approved: Boolean
+  validateOnly: Boolean
+  clientMutationId: String
+}
+
 type UpsertStoryPayload {
-  story: Blog
+  story: Story
   clientMutationId: String
 }
 

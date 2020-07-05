@@ -59,10 +59,10 @@ export class Context {
   }
 
   validate(input, mode) {
+    // console.log('validator', input, mode);
     const validator = new Validator(input, mode, errors => {
       throw new ValidationError(errors);
     });
-
     return transform => {
       transform(validator);
       return validator.validate();
@@ -86,7 +86,16 @@ export class Context {
       )
       .then(mapTo(keys, x => x.id)),
   );
-
+  blogById = new DataLoader(keys =>
+    db
+      .table('blogs')
+      .whereIn('id', keys)
+      .select()
+      .then(rows => {
+        return rows;
+      })
+      .then(mapTo(keys, x => x.id)),
+  );
   userByUsername = new DataLoader(keys =>
     db
       .table('users')

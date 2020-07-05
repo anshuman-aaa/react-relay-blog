@@ -56,35 +56,38 @@ export const upsertStory = mutationWithClientMutationId({
       }
 
       // Only the author of the story or admins can edit it
-      ctx.ensureIsAuthorized(
-        user => story.author_id === user.id || user.isAdmin,
-      );
-    } else {
-      ctx.ensureIsAuthorized();
+      // ctx.ensureIsAuthorized(
+      //   user => story.author_id === user.id || user.isAdmin,
+      // );
     }
+    //  else {
+    //   ctx.ensureIsAuthorized();
+    // }
 
     // Validate and sanitize user input
     const data = await ctx.validate(
       input,
       id ? 'update' : 'create',
-    )(x =>
-      x
-        .field('title', { trim: true })
-        .isRequired()
-        .isLength({ min: 5, max: 80 })
+    )(
+      x =>
+        x
+          .field('title', { trim: true })
+          .isRequired()
+          .isLength({ min: 5, max: 80 })
 
-        .field('text', { alias: 'URL or text', trim: true })
-        .isRequired()
-        .isLength({ min: 10, max: 1000 })
+          .field('text', { alias: 'URL or text', trim: true })
+          .isRequired()
+          .isLength({ min: 10, max: 1000 })
 
-        .field('text', {
-          trim: true,
-          as: 'is_url',
-          transform: x => validator.isURL(x, { protocols: ['http', 'https'] }),
-        })
+          .field('text', {
+            trim: true,
+            as: 'is_url',
+            transform: x =>
+              validator.isURL(x, { protocols: ['http', 'https'] }),
+          })
 
-        .field('approved')
-        .is(() => ctx.user.isAdmin, 'Only admins can approve a story.'),
+          .field('approved'),
+      // .is(() => ctx.user.isAdmin, 'Only admins can approve a story.'),
     );
 
     if (data.title) {
@@ -103,8 +106,8 @@ export const upsertStory = mutationWithClientMutationId({
         .insert({
           id: newId,
           ...data,
-          author_id: ctx.user.id,
-          approved: ctx.user.isAdmin ? true : false,
+          author_id: 'cc7958c5-1b2d-45a6-9328-8de5b05a357c',
+          approved: false,
         })
         .returning('*');
     }

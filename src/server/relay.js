@@ -11,6 +11,7 @@ import schema from './schema';
 import { Context } from './context';
 
 export function createRelay(req) {
+  // console.log('context', Context);
   function fetchQuery(operation, variables, cacheConfig) {
     return graphql({
       schema,
