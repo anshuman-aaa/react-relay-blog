@@ -6,3 +6,5 @@
 
 export * from './user';
 export * from './story';
+export * from './blog';
+export * from './category';

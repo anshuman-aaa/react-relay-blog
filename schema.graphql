@@ -4,27 +4,15 @@ enum AuthenticationProvider {
   FACEBOOK
 }
 
-type Comment implements Node {
+type Blog implements Node {
   # The ID of an object
   id: ID!
-  story: Story!
-  parent: Comment
-  author: User!
-  comments: [Comment]
-  text: String
-  pointsCount: Int!
+  categoryId: Int!
+  blogTitle: String!
+  blogDesc(truncate: Int): String!
+  blogLogo: String!
   createdAt(format: String): String
   updatedAt(format: String): String
-}
-
-input DeleteUserInput {
-  id: ID!
-  clientMutationId: String
-}
-
-type DeleteUserPayload {
-  deletedUserId: String
-  clientMutationId: String
 }
 
 type Identity {
@@ -44,17 +32,11 @@ input LikeStoryInput {
 }
 
 type LikeStoryPayload {
-  story: Story
+  story: Blog
   clientMutationId: String
 }
 
 type Mutation {
-  # Updates a user.
-  updateUser(input: UpdateUserInput!): UpdateUserPayload
-
-  # Deletes a user.
-  deleteUser(input: DeleteUserInput!): DeleteUserPayload
-
   # Creates or updates a story.
   upsertStory(input: UpsertStoryInput!): UpsertStoryPayload
 
@@ -98,54 +80,22 @@ type Query {
   me: User
   user(username: String!): User
   users(after: String, first: Int): UserConnection
-  story(slug: String!): Story
-  stories: [Story]
-}
-
-type Story implements Node {
-  # The ID of an object
-  id: ID!
-  author: User!
-  slug: String!
-  title: String!
-  text(truncate: Int): String!
-  isURL: Boolean!
-  comments: [Comment]
-  pointsCount: Int!
-  pointGiven: Boolean!
-  commentsCount: Int!
-  createdAt(format: String): String
-  updatedAt(format: String): String
-}
-
-input UpdateUserInput {
-  id: ID!
-  username: String
-  email: String
-  displayName: String
-  photoURL: String
-  timeZone: String
-  isAdmin: Boolean
-  validateOnly: Boolean
-  clientMutationId: String
-}
-
-type UpdateUserPayload {
-  user: User
-  clientMutationId: String
+  story(slug: String!): Blog
+  stories: [Blog]
 }
 
 input UpsertStoryInput {
-  id: ID
-  title: String
-  text: String
+  categoryId: Int
+  blogTitle: String
+  blogDesc: String
+  blogLogo: String
   approved: Boolean
   validateOnly: Boolean
   clientMutationId: String
 }
 
 type UpsertStoryPayload {
-  story: Story
+  story: Blog
   clientMutationId: String
 }
 

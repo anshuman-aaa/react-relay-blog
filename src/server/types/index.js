@@ -5,6 +5,8 @@
  */
 
 export * from './user';
+export * from './comment';
 export * from './identity';
 export * from './story';
-export * from './comment';
+export * from './category';
+export * from './blog';

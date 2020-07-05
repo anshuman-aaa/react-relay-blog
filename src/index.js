@@ -67,6 +67,7 @@ serviceWorker.unregister();
 // Hot Module Replacement
 // https://webpack.js.org/guides/hot-module-replacement/
 if (module.hot) {
+  console.log('module', module);
   module.hot.accept('./router', () => {
     render(history.location);
   });

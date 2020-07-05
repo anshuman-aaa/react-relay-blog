@@ -46,6 +46,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   // Local/dev environment
   const app = express();
+  app.use(express.json());
   const db = require('./db').default;
   app.use(require('./app').default);
   module.exports.default = app;
