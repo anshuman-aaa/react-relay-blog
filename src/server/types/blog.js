@@ -29,7 +29,9 @@ export const BlogType = new GraphQLObjectType({
     blogTitle: {
       type: new GraphQLNonNull(GraphQLString),
     },
-
+    slug: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
     blogDesc: {
       type: new GraphQLNonNull(GraphQLString),
       // args: {

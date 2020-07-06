@@ -9,6 +9,7 @@ type Blog implements Node {
   id: ID!
   categoryId: Int!
   blogTitle: String!
+  slug: String!
   blogDesc: String!
   blogLogo: String!
   createdAt(format: String): String
