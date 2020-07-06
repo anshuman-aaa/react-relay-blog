@@ -9,7 +9,7 @@ import { GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
 import db from '../db';
 import { BlogType } from '../types';
 
-export const story = {
+export const blog = {
   type: BlogType,
 
   args: {
@@ -37,7 +37,7 @@ export const story = {
   },
 };
 
-export const stories = {
+export const blogs = {
   type: new GraphQLList(BlogType),
 
   resolve(self, args, ctx) {

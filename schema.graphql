@@ -114,6 +114,8 @@ type Query {
   users(after: String, first: Int): UserConnection
   story(slug: String!): Story
   stories: [Story]
+  blog(slug: String!): Blog
+  blogs: [Blog]
 }
 
 type Story implements Node {
