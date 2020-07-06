@@ -14,7 +14,7 @@ exports.up = async db => {
     table.uuid('id').notNullable().defaultTo(db.raw('uuid_generate_v4()')).primary();
     table.string('username', 50).unique();
     table.string('email', 100).notNullable();
-    table.string('password').notNullable();
+    table.string('password');
     table.boolean('email_verified').notNullable().defaultTo(false);
     table.string('display_name', 100);
     table.string('photo_url', 250);

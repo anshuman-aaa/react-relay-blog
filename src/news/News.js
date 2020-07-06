@@ -7,7 +7,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
 import Snakbar from '@material-ui/core/Snackbar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -72,6 +71,7 @@ const useStyles = makeStyles(theme => ({
 
 function News(props) {
   const { data, relay } = props;
+  console.log('data', data);
   const { stories } = data;
   const self = React.useRef({});
   const [dialog, setDialog] = React.useState({ open: false });
@@ -137,7 +137,7 @@ function News(props) {
             style={{ paddingLeft: 0 }}
           >
             <ListItemAvatar>
-              <Avatar src={x.author.photoURL} alt={x.author.displayName} />
+              {/* <Avatar src={x.author.photoURL} alt={x.author.displayName} /> */}
             </ListItemAvatar>
             <ListItemText
               className={s.listItemText}
@@ -156,11 +156,9 @@ function News(props) {
               secondary={
                 <React.Fragment>
                   <span>
-                    by{' '}
-                    <Link href={`/@${x.author.username}`}>
-                      {x.author.displayName}
-                    </Link>{' '}
-                    | {x.createdAt}
+                    by {/* <Link href={`/@${x.author.username}`}> */}
+                    {/* {x.author.displayName} */}
+                    {/* </Link>{' '} */}| {x.createdAt}
                   </span>
                   <Link href={`/news/${x.slug}`}>
                     <ChatBubbleOutlineIcon /> (0)
@@ -199,11 +197,6 @@ export default createFragmentContainer(News, {
         text
         isURL
         createdAt(format: "MMM Do, YYYY")
-        author {
-          username
-          displayName
-          photoURL
-        }
         pointsCount
         pointGiven
       }

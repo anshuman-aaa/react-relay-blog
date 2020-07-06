@@ -95,7 +95,10 @@ passport.use(
       const credentials = { accessToken, refreshToken };
       upsertUser(profile, credentials)
         .then(user => cb(null, user))
-        .catch(err => cb(err));
+        .catch(err => {
+          cb(err);
+          console.log(err);
+        });
     },
   ),
 );

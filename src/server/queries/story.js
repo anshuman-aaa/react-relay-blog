@@ -41,12 +41,14 @@ export const stories = {
   type: new GraphQLList(StoryType),
 
   resolve(self, args, ctx) {
-    return db
-      .table('stories')
-      .where({ approved: true })
-      .orWhere({ approved: false, author_id: ctx.user ? ctx.user.id : null })
-      .orderBy('created_at', 'desc')
-      .limit(100)
-      .select();
+    return (
+      db
+        .table('stories')
+        // .where({ approved: true })
+        // .orWhere({ approved: false, author_id: ctx.user ? ctx.user.id : null })
+        .orderBy('created_at', 'desc')
+        .limit(100)
+        .select()
+    );
   },
 };
