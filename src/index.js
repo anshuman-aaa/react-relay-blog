@@ -62,7 +62,30 @@ render(history.location);
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+serviceWorker.register();
+
+//serviceWorker
+
+// let deferredPrompt;
+
+// if ('serviceWorker' in navigator) {
+//   const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
+//   navigator.serviceWorker
+//     .register(swUrl)
+//     .then(function() {
+//       console.log('Service worker registered!');
+//     })
+//     .catch(function(err) {
+//       console.log(err);
+//     });
+// }
+
+// window.addEventListener('beforeinstallprompt', function(event) {
+//   console.log('beforeinstallprompt fired');
+//   event.preventDefault();
+//   deferredPrompt = event;
+//   return false;
+// });
 
 // Hot Module Replacement
 // https://webpack.js.org/guides/hot-module-replacement/

@@ -15,7 +15,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import { createFragmentContainer, graphql } from 'react-relay';
 
 import TextField from '../common/TextField';
-import UpsertStoryMutation from '../mutations/UpsertStory';
+import UpsertBlogMutation from '../mutations/UpsertBlog';
 import { useHistory, useAuth } from '../hooks';
 
 const initialState = {
@@ -34,18 +34,20 @@ function SubmitBlog(props) {
   function handleSubmit(event) {
     event.preventDefault();
     setState(x => ({ ...x, loading: true, errors: null }));
-    UpsertStoryMutation.commit(
+    UpsertBlogMutation.commit(
       relay.environment,
       {
-        title: state.title || '',
-        text: state.text || '',
+        blogTitle: state.title || '',
+        blogDesc: state.text || '',
+        blogLogo: 'www.ggole.com/photos',
+        categoryId: 1,
       },
-      (errors, story) => {
+      (errors, blog) => {
         if (errors) {
           setState(x => ({ ...x, loading: false, errors }));
         } else {
           props.onClose();
-          history.push(`/news/${story.slug}`);
+          history.push(`/blogs/${blog.slug}`);
         }
       },
     );
@@ -58,12 +60,12 @@ function SubmitBlog(props) {
 
   return (
     <Dialog open={props.open} onClose={props.onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Submit a New Story</DialogTitle>
+      <DialogTitle>Submit a New Blog</DialogTitle>
       <DialogContent>
         <DialogContentText>
           Do you have something cool to share?
         </DialogContentText>
-        <form id="story-form" onSubmit={handleSubmit}>
+        <form id="blog-form" onSubmit={handleSubmit}>
           <TextField
             name="title"
             label="Title"
@@ -91,7 +93,7 @@ function SubmitBlog(props) {
       </DialogContent>
       <DialogActions>
         <Button onClick={props.onClose}>Cancel</Button>
-        <Button type="submit" form="story-form" disabled={!me}>
+        <Button type="submit" form="blog-form" disabled={!me}>
           Submit
         </Button>
       </DialogActions>

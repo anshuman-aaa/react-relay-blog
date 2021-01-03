@@ -42,6 +42,7 @@ export default [
       }
     `,
     render: ([Story], data, ctx) => {
+      console.log(data, ctx);
       if (data.story && data.story.slug !== ctx.params.slug) {
         return { status: 301, redirect: `/news/${data.story.slug}` };
       } else if (data.story) {

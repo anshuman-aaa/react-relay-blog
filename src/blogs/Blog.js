@@ -49,7 +49,6 @@ export default createFragmentContainer(Blog, {
   blog: graphql`
     fragment Blog_blog on Blog {
       id
-      categoryId
       blogDesc
       blogTitle
       blogLogo

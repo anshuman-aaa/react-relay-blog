@@ -11,7 +11,7 @@ import Layout from '../common/Layout';
 export default [
   {
     path: '/blogs',
-    components: () => [import(/* webpackChunkName: 'news' */ './Blogs')],
+    components: () => [import(/* webpackChunkName: 'blogs' */ './Blogs')],
     query: graphql`
       query blogsQuery {
         ...Layout_data
@@ -25,23 +25,26 @@ export default [
           <Blogs data={data} />
         </Layout>
       ),
-      chunks: ['news'],
+      chunks: ['blogs'],
     }),
   },
   {
     path: '/blogs/:slug',
-    components: () => [import(/* webpackChunkName: 'story' */ './Blog')],
+    components: () => [import(/* webpackChunkName: 'blog' */ './Blog')],
     query: graphql`
       query blogsBlogQuery($slug: String!) {
         ...Layout_data
         blog(slug: $slug) {
           ...Blog_blog
+          slug
+          blogTitle
         }
       }
     `,
     render: ([Blog], data, ctx) => {
-      if (data.story && data.story.slug !== ctx.params.slug) {
-        return { status: 301, redirect: `/news/${data.blog.slug}` };
+      console.log(data, ctx);
+      if (data.blog && data.blog.slug !== ctx.params.slug) {
+        return { status: 301, redirect: `/blogs/${data.blog.slug}` };
       } else if (data.blog) {
         return {
           title: data.blog.blogTitle,

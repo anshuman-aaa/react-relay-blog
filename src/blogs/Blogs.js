@@ -19,7 +19,6 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import Link from '../common/Link';
 import SubmitBlog from './SubmitBlog';
 import LikeStoryMutation from '../mutations/LikeStory';
-import { blog } from '../server/queries/blog';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -69,6 +68,7 @@ const useStyles = makeStyles(theme => ({
 function Blogs(props) {
   const { data, relay } = props;
   const { blogs } = data;
+  console.log(blogs);
   const self = React.useRef({});
   const [dialog, setDialog] = React.useState({ open: false });
   const [error, setError] = React.useState();
@@ -97,8 +97,8 @@ function Blogs(props) {
   return (
     <div className={s.root}>
       <Typography className={s.title} variant="h3" gutterBottom>
-        <span className={s.grow}>News</span>
-        <Button onClick={openDialog}>Submit a Story</Button>
+        <span className={s.grow}>Blogs</span>
+        <Button onClick={openDialog}>Submit a Blog</Button>
       </Typography>
       <Typography gutterBottom>
         The latest news from React.js community. This page demonstrates how to
@@ -126,7 +126,7 @@ function Blogs(props) {
               className={s.listItemText}
               primary={
                 x.blogTitle ? (
-                  <a href={x.text}>
+                  <a href={x.slug}>
                     {x.blogTitle}{' '}
                     <OpenInNewIcon
                       style={{ width: 10, height: 10, verticalAlign: 'top' }}
@@ -164,12 +164,11 @@ export default createFragmentContainer(Blogs, {
   data: graphql`
     fragment Blogs_data on Query {
       me {
-        ...SubmitDialog_me
+        ...SubmitBlog_me
       }
       blogs {
         id
         slug
-        categoryId
         blogDesc
         blogTitle
         blogLogo

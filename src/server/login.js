@@ -89,6 +89,7 @@ router.post('/login/clear', (req, res) => {
 });
 router.post('/register', async (req, res) => {
   try {
+    console.log(req.body);
     const { email, password, username } = req.body;
     const [userInfo] = await db
       .table('users')

@@ -10,6 +10,7 @@ import passport from './passport';
 import login from './login';
 import api from './api';
 import ssr from './ssr';
+import pwa from './pwa';
 
 const router = new Router();
 
@@ -19,5 +20,6 @@ router.use(passport.session());
 router.use(login);
 router.use(api);
 router.use(ssr);
+router.use(pwa);
 
 export default router;

@@ -25,10 +25,10 @@ export default {
   // https://firebase.google.com/docs/web/setup
   firebase: {
     projectId: process.env.GCP_PROJECT,
-    authDomain: process.env.APP_ORIGIN.startsWith('http://localhost')
-      ? `${process.env.GCP_PROJECT}.firebaseapp.com`
-      : process.env.APP_ORIGIN.replace(/^https?:\/\//, ''),
-    apiKey: process.env.GCP_BROWSER_KEY,
+    // authDomain: process.env.APP_ORIGIN.startsWith('http://localhost')
+    //   ? `${process.env.GCP_PROJECT}.firebaseapp.com`
+    //   : process.env.APP_ORIGIN.replace(/^https?:\/\//, ''),
+    // apiKey: process.env.GCP_BROWSER_KEY,
   },
 
   // Facebook SDK for JavaScript (src/utils/fb.js)
