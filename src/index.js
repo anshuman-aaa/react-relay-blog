@@ -10,7 +10,7 @@ import qs from 'query-string';
 import { createBrowserHistory } from 'history';
 
 import App from './common/App';
-import * as serviceWorker from './serviceWorker';
+import * as serviceWorker from './serviceWorker-other';
 import router from './router';
 import { createRelay } from './relay';
 import { setHistory } from './utils/scrolling';
